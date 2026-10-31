@@ -28,3 +28,6 @@
 1793464948267: / New Req Received
 1793464948387: /favicon.ico New Req Received
 1793464962195: /about New Req Received
+1793465984531: GET / New Req Received
+1793465984820: GET /favicon.ico New Req Received
+1793466006501: GET /about New Req Received
