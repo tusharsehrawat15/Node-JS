@@ -1,50 +1,25 @@
 const express = require("express");
-const users = require("./MOCK_DATA.json");
-const { default: mongoose } = require("mongoose");
+
+const { logReqRes } = require("./middlewares");
 const mongoose = require("mongoose");
+
+const userRouter = require("./Routes/user");
+const {connectMongoDb} = require("./views/connection")
+
 const app = express();
 const PORT = 8000;
 
 
 //connection
-mongoose.connect("mongodb://127.0.0.1:27017/app-1")
-.then(()=> console.log("MongoDB Connected"))
-.catch((err) => console.log("Mongo Error", err));
+connectMongoDb("mongodb://127.0.0.1:27017/app-1").then(()=> console.log("MongoDb connected"));
 
 
-//Schema
-const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
-    },
-    lastName: {
-        type: String,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    jobTitle: {
-        type: String,
-    },
-    gender: {
-        type: String,
-    }
-})
+//Middleware - Plugin
+app.use(express.urlencoded({extended: false}));
+app.use(logReqRes("log.txt"));
 
-const userSchema = mongoose.model("user", userSchema);
 
 //Routes
-app.get("/api/users", (req, res) => {
-    return res.json(users);
-});
-
-app.get("/api/users/:id", (req, res)=>{
-    const id = Number(req.params.id);
-    const user = users.find((user) => user.id === id);
-    return res.json(user);
-});
+app.use("/api/users", userRouter);
 
 app.listen(PORT, ()=> console.log(`Server started at PORT: ${PORT}`))

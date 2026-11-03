@@ -1,0 +1,23 @@
+const express = require("express");
+const { 
+    handleGetAllUsers, 
+    handleGetUserById, 
+    handleUpdateUserById,
+    handleDeleteUserByID,
+    handleCreateNewUser
+} = require('../controllers/user');
+
+const router = express.Router();
+
+
+//Rest API
+router.route("/").get(handleGetAllUsers).post(handleCreateNewUser);
+
+router
+    .route("/:id")
+    .get(handleGetUserById)
+    .patch(handleUpdateUserById)
+    .delete(handleDeleteUserByID);
+
+
+module.exports = router;
